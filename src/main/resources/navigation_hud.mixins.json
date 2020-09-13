@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "package": "com.github.chaostheeternal.navigation_hud.mixins",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [],
+    "client": [
+        "InGameHudMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
