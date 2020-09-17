@@ -1,23 +1,30 @@
 package com.github.chaostheeternal.navigation_hud.display;
 
+import java.util.Locale;
+
+import com.github.chaostheeternal.navigation_hud.NavigationHUDMod;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.BackgroundHelper.ColorMixer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class Hud extends Screen {
     private static int TextColor;
     public Hud() {
         super(new LiteralText("Navigation HUD"));
-        TextColor = ColorMixer.getArgb(218, 218, 218, 218); //TODO: maybe see about making this a configuration item?
-        // Could only work for the one thing though, I don't know if I could do the compass and horizon "graphics" like this as well
+        TextColor = ColorMixer.getArgb(218, 218, 218, 218);
     }
+    private static final Identifier COMPASS_TEXTURE = new Identifier(NavigationHUDMod.MOD_ID, "textures/gui/compass.png");
+    private static final Identifier HORIZON_TEXTURE = new Identifier(NavigationHUDMod.MOD_ID, "textures/gui/horizon.png");
+    // java.io.FileNotFoundException: navigation_hud:textures/gui/compass.png
+    // But, that path *does* exist.
 
-    public static void draw(MatrixStack matrices, float tickDelta)
-	{
+    public static void draw(MatrixStack matrices, float tickDelta) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (!mc.options.debugEnabled) { //Only rendering if not in the "debug" panel
             Entity pc = mc.getCameraEntity();
@@ -31,32 +38,34 @@ public class Hud extends Screen {
         drawCenteredString(matrices, client.textRenderer, posXYZ, client.getWindow().getScaledWidth() / 2, 10, TextColor);
     }
     private static void drawCompass(MatrixStack matrices, MinecraftClient client, Entity camera) {
-        //NOTE: The graphic will probably have to be "W...NW...N...NE...E...SE...S...SW...W...NW...N...NE...E"
-        // with 0 deciding to render from S and moving left for negative and right for positive (with the "180" area flipping)
-        // It'd be hard to do this as text and keep the NW/NE/SW/SE items
-        //client.getTextureManager().bindTexture(TEXTURE_ID);
-        //drawTexture(matrices, x, y, width, height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
-        float yaw = MathHelper.wrapDegrees(camera.yaw);
-        String direction = "N ";
-        if (157.5F > yaw && yaw >= 112.5F) {
-            direction = "NW";
-        } else if (112.5F > yaw && yaw >= 67.5F) {
-            direction = "W ";
-        } else if (67.5F > yaw && yaw >= 22.5F) {
-            direction = "SW";
-        } else if (22.5F > yaw && yaw >= -22.5F) {
-            direction = "S ";
-        } else if (-22.5F > yaw && yaw >= -67.5F) {
-            direction = "SE";
-        } else if (-67.5F > yaw && yaw >= -112.5F) {
-            direction = "E ";
-        } else if (-112.5F > yaw && yaw >= -157.5F) {
-            direction = "NE";
-        }
-        String compass = String.format("Direction: %s (%.1f)", direction, yaw);
-        drawStringWithShadow(matrices, client.textRenderer, compass, 1, 1, TextColor); //This is going to change out to a "graphic"
+        client.getTextureManager().bindTexture(COMPASS_TEXTURE);
+        drawTexture(matrices, (client.getWindow().getScaledWidth() / 2) - 130, 1, 260, 8, 266.5F + (MathHelper.wrapDegrees(camera.yaw) * 1.4444F), 0.0F, 260, 8, 793, 8);
+        //I think this works except that the texture loading isn't actually working
     }
     private static void drawHorizonGuide(MatrixStack matrices, MinecraftClient client, Entity camera) {
+        /* Think the graphic should have DANGER printed at 90 and -90 in the middle of the horizon line
+           So it looks like
+                -90 ===         DANGER         === -90
+                -80 ====                      ==== -80
+                -70 =====                    ===== -70
+                -60 ======                  ====== -60
+                -50 =======                ======= -50
+                -40 ========              ======== -40
+                -30 =========            ========= -30
+                -20 ==========          ========== -20
+                -10 ===========        =========== -10
+                =================[  ]=================
+                +10 ===========        =========== +10
+                +20 ==========          ========== +20
+                +30 =========            ========= +30
+                +40 ========              ======== +40
+                +50 =======                ======= +50
+                +60 ======                  ====== +60
+                +70 =====                    ===== +70
+                +80 ====                      ==== +80
+                +90 ===         DANGER         === +90
+          But obviously with more space between the lines
+        */
         //client.getTextureManager().bindTexture(TEXTURE_ID);
         //drawTexture(matrices, x, y, width, height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
         String horizon = String.format("Flying Angle: %.1f", MathHelper.wrapDegrees(camera.pitch));

@@ -1,6 +1,6 @@
 package com.github.chaostheeternal.navigation_hud;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
 import com.github.chaostheeternal.navigation_hud.display.Hud;
 
@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class NavigationHUDMod implements ModInitializer {
+public class NavigationHUDMod implements ClientModInitializer {
 
     public static Logger LOGGER = LogManager.getLogger();
 
@@ -18,7 +18,7 @@ public class NavigationHUDMod implements ModInitializer {
     public static Hud HUD = new Hud();
 
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
         LOGGER.info("{}:initialize", getClass().getName());
     }
 }

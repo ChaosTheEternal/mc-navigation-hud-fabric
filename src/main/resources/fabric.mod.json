@@ -16,7 +16,7 @@
   "icon": "assets/navigation_hud/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "client": [
       "com.github.chaostheeternal.navigation_hud.NavigationHUDMod"
     ]
   },
