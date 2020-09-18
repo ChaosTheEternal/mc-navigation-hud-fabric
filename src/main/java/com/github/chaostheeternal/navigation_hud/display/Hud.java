@@ -17,12 +17,10 @@ public class Hud extends Screen {
     private static int TextColor;
     public Hud() {
         super(new LiteralText("Navigation HUD"));
-        TextColor = ColorMixer.getArgb(218, 218, 218, 218);
+        TextColor = ColorMixer.getArgb(255, 255, 255, 255);
     }
     private static final Identifier COMPASS_TEXTURE = new Identifier(NavigationHUDMod.MOD_ID, "textures/gui/compass.png");
     private static final Identifier HORIZON_TEXTURE = new Identifier(NavigationHUDMod.MOD_ID, "textures/gui/horizon.png");
-    // java.io.FileNotFoundException: navigation_hud:textures/gui/compass.png
-    // But, that path *does* exist.
 
     public static void draw(MatrixStack matrices, float tickDelta) {
         MinecraftClient mc = MinecraftClient.getInstance();
@@ -39,8 +37,8 @@ public class Hud extends Screen {
     }
     private static void drawCompass(MatrixStack matrices, MinecraftClient client, Entity camera) {
         client.getTextureManager().bindTexture(COMPASS_TEXTURE);
-        drawTexture(matrices, (client.getWindow().getScaledWidth() / 2) - 130, 1, 260, 8, 266.5F + (MathHelper.wrapDegrees(camera.yaw) * 1.4444F), 0.0F, 260, 8, 793, 8);
-        //I think this works except that the texture loading isn't actually working
+        drawTexture(matrices, (client.getWindow().getScaledWidth() / 2) - 180, 1, 360, 8, 840.5F + (MathHelper.wrapDegrees(camera.yaw) * 3.755F), 0.0F, 360, 8, 2041, 8);
+        //Can't apparently do translucent, e.g. image contains pixels that aren't alpha 255 or 0
     }
     private static void drawHorizonGuide(MatrixStack matrices, MinecraftClient client, Entity camera) {
         /* Think the graphic should have DANGER printed at 90 and -90 in the middle of the horizon line
